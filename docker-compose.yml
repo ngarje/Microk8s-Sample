@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  microk8s.razor:
+    image: ${DOCKER_REGISTRY-}microk8srazor
+    build:
+      context: .
+      dockerfile: MicroK8s.Razor/Dockerfile
+
+  microk8s.api:
+    image: ${DOCKER_REGISTRY-}microk8sapi
+    build:
+      context: .
+      dockerfile: MicroK8s.Api/Dockerfile
+
+  microk8s.intraapi:
+    image: ${DOCKER_REGISTRY-}microk8sintraapi
+    build:
+      context: .
+      dockerfile: MicroK8s.IntraApi/Dockerfile
