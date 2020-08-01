@@ -1,0 +1,35 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  name: microk8srazor-service
+  namespace: bdn-poc
+spec:
+  type: NodePort
+  selector:
+    mylabel: microk8razor
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30100
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microk8srazor-api
+  namespace: bdn-poc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      mylabel: microk8razor
+  template:
+    metadata:
+      labels:
+        mylabel: microk8razor
+    spec:
+      containers:
+        - name: microk8srazor-site
+          image: ngarje/microk8srazor
+
+
+

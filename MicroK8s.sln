@@ -9,7 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroK8s.Api", "MicroK8s.Ap
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6900BADD-7C4A-403F-8671-12F4805DE231}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroK8s.IntraApi", "MicroK8s.IntraApi\MicroK8s.IntraApi.csproj", "{B4BDE341-B934-4796-94EC-626365ACE475}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroK8s.IntraApi", "MicroK8s.IntraApi\MicroK8s.IntraApi.csproj", "{B4BDE341-B934-4796-94EC-626365ACE475}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroK8s-yaml", "MicroK8s-yaml", "{7B80BC89-0944-47EA-B2A7-DC1061AC836C}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\zeta\bdn-poc\api-gateway.yaml = ..\..\zeta\bdn-poc\api-gateway.yaml
+		..\..\zeta\bdn-poc\api-service.yaml = ..\..\zeta\bdn-poc\api-service.yaml
+		..\..\zeta\bdn-poc\default-http-backend.yaml = ..\..\zeta\bdn-poc\default-http-backend.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

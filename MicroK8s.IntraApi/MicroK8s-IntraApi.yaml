@@ -1,0 +1,55 @@
+﻿apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    svc: microk8-api-intra-svc
+  name: microk8-api-intra-svc-nlb
+  namespace: bdn-poc
+spec:
+  type: LoadBalancer
+  ports:
+  - name: microk8-api-intra-svc-port
+    port: 80
+    protocol: TCP
+
+  selector:
+    app: microk8sintraapi #for creating a deployment in kubernetes
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    svc: microk8-api-intra-svc
+  name: microk8-api-intra-svc
+  namespace: bdn-poc
+spec:
+  type: ClusterIP
+  ports:
+  - name: microk8-api-intra-svc-port
+    port: 80
+    protocol: TCP
+  selector:
+    app: microk8sintraapi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microk8-api-intra-dep
+  namespace: bdn-poc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app : microk8sintraapi
+  template:
+    metadata:
+      labels:
+        app : microk8sintraapi  
+    spec:
+      containers:
+        - name: microk8-api-intra-dep-cnt
+          image: ngarje/microk8sintraapi:latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 80
+
