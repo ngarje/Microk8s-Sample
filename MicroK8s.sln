@@ -36,6 +36,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MicroK8s-UI", "MicroK8s-UI\
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "55425"
+		SlnRelativePath = "MicroK8s-UI\"
 	EndProjectSection
 EndProject
 Global
