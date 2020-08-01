@@ -18,27 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroK8s-yaml", "MicroK8s-y
 		..\..\zeta\bdn-poc\default-http-backend.yaml = ..\..\zeta\bdn-poc\default-http-backend.yaml
 	EndProjectSection
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MicroK8s-UI", "MicroK8s-UI\", "{CDA73C24-645A-4A1D-AE8A-CA6C772215B0}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
-		Debug.AspNetCompiler.VirtualPath = "/localhost_55425"
-		Debug.AspNetCompiler.PhysicalPath = "MicroK8s-UI\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55425\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/localhost_55425"
-		Release.AspNetCompiler.PhysicalPath = "MicroK8s-UI\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_55425\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "55425"
-		SlnRelativePath = "MicroK8s-UI\"
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,10 +40,6 @@ Global
 		{B4BDE341-B934-4796-94EC-626365ACE475}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4BDE341-B934-4796-94EC-626365ACE475}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4BDE341-B934-4796-94EC-626365ACE475}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDA73C24-645A-4A1D-AE8A-CA6C772215B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDA73C24-645A-4A1D-AE8A-CA6C772215B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDA73C24-645A-4A1D-AE8A-CA6C772215B0}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDA73C24-645A-4A1D-AE8A-CA6C772215B0}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
