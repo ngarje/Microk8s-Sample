@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    svc: microk8-ang-ui-svc
+  name: microk8-ang-ui-svc-nlb
+  namespace: bdn-poc
+spec:
+  type: NodePort
+  ports:
+  - name: microk8-ang-ui-svc-port
+    port: 80
+    nodePort: 30200
+
+  selector:
+    app: microk8ui #for creating a deployment in kubernetes
