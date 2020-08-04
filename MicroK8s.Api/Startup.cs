@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +29,11 @@ namespace MicroK8s.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration["Redis:ConnectionString"];
+                options.InstanceName = Configuration["Redis:InstanceName"];
+            });
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -42,18 +47,28 @@ namespace MicroK8s.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.docker.json", optional: true)
+                .AddEnvironmentVariables();
+
+
             app.UseCors(MyAllowSpecificOrigins);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHsts();
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

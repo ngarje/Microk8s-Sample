@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Security.Policy;
 
 namespace MicroK8s.IntraApi.Controllers
 {
@@ -11,6 +12,14 @@ namespace MicroK8s.IntraApi.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+        private readonly IWebHostEnvironment env;
+        private readonly IConfiguration config;
+
+        public HomeController(IWebHostEnvironment env, IConfiguration config)
+        {
+            this.env = env;
+            this.config = config;
+        }
         // GET: api/Home
         [HttpGet]
         public object Get()
@@ -18,6 +27,7 @@ namespace MicroK8s.IntraApi.Controllers
             var baseUrl = new Uri($"{this.Request.Scheme}://{Request.Host.Value}{this.Request.PathBase.Value}");
             return new
             {
+
                 hostInfo = GetHostInfo(),
                 name = Assembly.GetExecutingAssembly().FullName,
                 controllerUrl = new string[] {
@@ -27,14 +37,20 @@ namespace MicroK8s.IntraApi.Controllers
             };
         }
 
-        private string GetHostInfo()
+        private object GetHostInfo()
         {
             string result = "UNKNOWN";
             try
             {
-                result = Dns.GetHostName().ToUpperInvariant();
-                IPAddress[] ipaddress = Dns.GetHostAddresses(result);
-                result += " : " + string.Join("; ", ipaddress.Select(x => x.ToString())); ;
+                IPAddress[] ipaddress = Dns.GetHostAddresses(Dns.GetHostName());
+                return new {
+                    Environment.MachineName,
+                    IPAddress = string.Join("; ", ipaddress.Select(x => x.ToString())),
+                    env.EnvironmentName,
+                    Redis__ConnectionString = config["Redis:ConnectionString"],
+                    Redis__InstanceName = config["Redis:InstanceName"]
+
+                };
             }
             catch
             {
