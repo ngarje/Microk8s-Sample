@@ -3,23 +3,6 @@ kind: Service
 metadata:
   labels:
     svc: microk8-api-intra-svc
-  name: microk8-api-intra-svc-nlb
-  namespace: bdn-poc
-spec:
-  type: LoadBalancer
-  ports:
-  - name: microk8-api-intra-svc-port
-    port: 80
-    protocol: TCP
-
-  selector:
-    app: microk8sintraapi #for creating a deployment in kubernetes
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    svc: microk8-api-intra-svc
   name: microk8-api-intra-svc
   namespace: bdn-poc
 spec:
@@ -56,4 +39,4 @@ spec:
           - name: "Redis__InstanceName"
             value: "bdn-poc-api"
           - name: "Redis__ConnectionString"
-            value: "bdn-poc-api"
+            value: "10.152.183.129:6379"
