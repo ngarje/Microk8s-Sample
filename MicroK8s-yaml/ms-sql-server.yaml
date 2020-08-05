@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microk8s-mssql-svc
+  namespace: bdn-poc
+  labels:
+    svc: microk8s-mssql-svc
+spec:
+  type: NodePort
+  ports:
+  - targetPort: 1433
+    port: 1433
+    nodePort: 31433
+  selector:
+    app: microk8sdb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microk8s-mssql-dep
+  namespace: bdn-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microk8sdb 
+  template:
+    metadata: 
+      labels:
+        app: microk8sdb
+    spec:
+      containers:
+        - name: microk8s-mssql-cnt
+          image: mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
+          imagePullPolicy: Always
+          env:
+          - name: ACCEPT_EULA
+            value: "Y"
+          - name: SA_PASSWORD
+            value: Testingmicrok8s
+          - name: MSSQL_PID
+            value: Developer
+          ports:
+          - containerPort: 1433
+            name: microk8spoc  
