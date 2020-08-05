@@ -1,16 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MediatR;
+using MicroK8s.Api.Database.Context;
+using MicroK8s.Api.Models;
+using MicroK8s.Api.Receiver;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace MicroK8s.Api
 {
@@ -28,12 +26,23 @@ namespace MicroK8s.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));
+            var connectionString = Configuration.GetConnectionString(nameof(EfContext));
+            services.AddDbContext<EfContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+
             services.AddControllers();
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration["Redis:ConnectionString"];
                 options.InstanceName = Configuration["Redis:InstanceName"];
             });
+            services.AddTransient<ICountryUpdateRepository, CountryUpdateRepository>();
+            services.AddTransient<ICountryUpdateService, CountryUpdateService>();
+            services.AddMediatR(typeof(CountryUpdateCommand).Assembly);
+            //services.AddTransient<IRequestHandler<CountryUpdateCommand>, CountryUpdateCommandHandler>();
+                      
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -42,10 +51,12 @@ namespace MicroK8s.Api
                                       builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                                   });
             });
+
+            services.AddHostedService<CountryUpdateReceiver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, EfContext dataContext)
         {
 
             var builder = new ConfigurationBuilder()
@@ -61,6 +72,8 @@ namespace MicroK8s.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            dataContext.Database.Migrate();
 
             app.UseHsts();
             app.UseHttpsRedirection();

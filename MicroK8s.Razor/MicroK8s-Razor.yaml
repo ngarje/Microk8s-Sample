@@ -30,6 +30,23 @@ spec:
       containers:
         - name: microk8srazor-site
           image: ngarje/microk8srazor
-
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 80
+          env:
+          - name: "Redis__InstanceName"
+            value: "bdn-poc-api"
+          - name: "Redis__ConnectionString"
+            value: "10.152.183.77:6379"
+          - name: "ConnectionStrings__EfContext"
+            value: "Data Source=10.138.108.40,31433;User ID=sa;Password=Testingmicrok8s;Database=MicroK8sApi"
+          - name: "RabbitMq__Hostname"
+            value: "10.152.183.209"
+          - name: "RabbitMq__Port"
+            value: "5672"
+          - name: "RabbitMq__Password"
+            value: "admin"
+          - name: "RabbitMq__UserName"
+            value: "admin"
 
 

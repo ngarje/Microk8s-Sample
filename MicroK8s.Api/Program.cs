@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace MicroK8s.Api
 {
@@ -7,7 +9,7 @@ namespace MicroK8s.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).UseSerilog().Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -17,6 +19,24 @@ namespace MicroK8s.Api
                     webBuilder
                     .UseContentRoot(System.IO.Directory.GetCurrentDirectory())
                     .UseStartup<Startup>();
-                });
+                })
+                .UseDefaultServiceProvider(options =>
+                    options.ValidateScopes = false); // needed for mediatr DI
+    }
+
+    public static class Extensions
+    {
+        public static IHostBuilder UseSerilog(this IHostBuilder builder)
+        {
+            var configuration = new ConfigurationBuilder()
+                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+            
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
+            SerilogHostBuilderExtensions.UseSerilog(builder);
+
+            return builder;
+        }
     }
 }

@@ -48,7 +48,8 @@ namespace MicroK8s.IntraApi.Controllers
                     IPAddress = string.Join("; ", ipaddress.Select(x => x.ToString())),
                     env.EnvironmentName,
                     Redis__ConnectionString = config["Redis:ConnectionString"],
-                    Redis__InstanceName = config["Redis:InstanceName"]
+                    Redis__InstanceName = config["Redis:InstanceName"],
+                    Mssql__ConnectionString = config["ConnectionStrings:EfContext"],
 
                 };
             }

@@ -39,4 +39,4 @@ spec:
           - name: "Redis__InstanceName"
             value: "bdn-poc-api"
           - name: "Redis__ConnectionString"
-            value: "10.152.183.129:6379"
+            value: "10.152.183.77:6379"

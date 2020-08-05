@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace MicroK8s.Razor
 {
@@ -13,7 +9,7 @@ namespace MicroK8s.Razor
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).UseSerilog().Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,5 +18,21 @@ namespace MicroK8s.Razor
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+    }
+
+    public static class Extensions
+    {
+        public static IHostBuilder UseSerilog(this IHostBuilder builder)
+        {
+            var configuration = new ConfigurationBuilder()
+                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
+            SerilogHostBuilderExtensions.UseSerilog(builder);
+
+            return builder;
+        }
     }
 }

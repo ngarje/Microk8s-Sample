@@ -1,5 +1,9 @@
-﻿using MicroK8s.Api.Models;
+﻿using AgileObjects.AgileMapper;
+using AgileObjects.AgileMapper.Extensions;
+using MicroK8s.Api.Database.Context;
+using MicroK8s.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using System;
@@ -14,9 +18,11 @@ namespace MicroK8s.Api.Controllers
     public class CountriesController : ControllerBase
     {
         private readonly  IDistributedCache cacheManager;
-        public CountriesController(IDistributedCache cacheManager)
+        private readonly EfContext efContext;
+        public CountriesController(IDistributedCache cacheManager, EfContext efContext)
         {
             this.cacheManager = cacheManager;
+            this.efContext = efContext;
         }
         [HttpGet]
         public IActionResult GetCountries(int? page, int? pageSize, string name = null, string code = null)
@@ -33,7 +39,11 @@ namespace MicroK8s.Api.Controllers
             pageSize = !pageSize.HasValue ? 10 : pageSize;
             try
             {
-                return Ok(GetCountryList().Where(CountryNameClause).Where(CountryCodeClause).Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).OrderBy(x => x.Name).ToList());
+                return Ok(GetCountryList()
+                    .Where(CountryNameClause)
+                    .Where(CountryCodeClause)
+                    .OrderByDescending(x => x.ModifiedDate).ThenBy(x=>x.Name)
+                    .Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value).ToList());
 
             }
             catch (Exception ex)
@@ -57,12 +67,13 @@ namespace MicroK8s.Api.Controllers
             }
             else
             {
-                countryList = CountryModel.Countries;
+                var countryDbList = efContext.CountryTable.Include(x=>x.Region).ToList();
+                countryList = Mapper.Map(countryDbList).ToANew<List<CountryModel>>();
                 countryList.ForEach(x => x.CachedTime = DateTime.Now);
                 serializedCountries = JsonConvert.SerializeObject(countryList);
                 encodedCountries = Encoding.UTF8.GetBytes(serializedCountries);
                 var options = new DistributedCacheEntryOptions()
-                                    .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                                    .SetSlidingExpiration(TimeSpan.FromMinutes(60))
                                     .SetAbsoluteExpiration(DateTime.Now.AddDays(6));
                 cacheManager.Set(cacheKey, encodedCountries, options);
 

@@ -15,8 +15,10 @@ namespace MicroK8s.Api.Models
         public long Id { get; private set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public RegionModel Region { get; set; }
         public DateTime CachedTime { get; set; }
-
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public static List<CountryModel> Countries => new List<CountryModel> {
             new CountryModel(2,"United Arab Emirates","AE"),
 new CountryModel(3,"Afghanistan","AF"),
