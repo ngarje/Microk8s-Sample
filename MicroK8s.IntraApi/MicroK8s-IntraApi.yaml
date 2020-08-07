@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: microk8-api-intra-dep-cnt
-          image: ngarje/microk8sintraapi:latest
+          image: localhost:32000/microk8sintraapi:registry
           imagePullPolicy: Always
           ports:
           - containerPort: 80

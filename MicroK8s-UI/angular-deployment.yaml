@@ -48,7 +48,7 @@ spec:
     spec:
       containers:
         - name: microk8-ang-ui-dep-cnt
-          image: ngarje/microk8ui:latest
+          image: localhost:32000/microk8ui:registry
           imagePullPolicy: Always
           ports:
           - containerPort: 80
