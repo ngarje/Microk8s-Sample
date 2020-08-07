@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
+using System.Diagnostics;
 
 namespace MicroK8s.Api
 {
@@ -35,6 +37,8 @@ namespace MicroK8s.Api
             
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
             SerilogHostBuilderExtensions.UseSerilog(builder);
+            Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
+            Serilog.Debugging.SelfLog.Enable(Console.Error);
 
             return builder;
         }

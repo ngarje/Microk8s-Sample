@@ -5,6 +5,7 @@ using MicroK8s.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,14 +20,17 @@ namespace MicroK8s.Api.Controllers
     {
         private readonly  IDistributedCache cacheManager;
         private readonly EfContext efContext;
-        public CountriesController(IDistributedCache cacheManager, EfContext efContext)
+        private readonly ILogger<CountriesController> logger;
+        public CountriesController(IDistributedCache cacheManager, EfContext efContext, ILogger<CountriesController> logger)
         {
             this.cacheManager = cacheManager;
             this.efContext = efContext;
+            this.logger = logger;
         }
         [HttpGet]
         public IActionResult GetCountries(int? page, int? pageSize, string name = null, string code = null)
         {
+            logger.LogError("Start GetCountries");
             bool CountryNameClause(CountryModel m) {
                 return string.IsNullOrWhiteSpace(name) ? true : m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant());
             }
@@ -48,7 +52,7 @@ namespace MicroK8s.Api.Controllers
             }
             catch (Exception ex)
             {
-
+                logger.LogError(ex,ex.Message);
                 return Problem(detail: ex.StackTrace, title: ex.Message);
             }
         }

@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using System;
+using System.Diagnostics;
 
 namespace MicroK8s.IntraApi
 {
@@ -13,14 +11,36 @@ namespace MicroK8s.IntraApi
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).UseSerilog().Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
-                });
+                    webBuilder
+                    .UseContentRoot(System.IO.Directory.GetCurrentDirectory())
+                    .UseStartup<Startup>();
+                })
+                .UseDefaultServiceProvider(options =>
+                    options.ValidateScopes = false); // needed for mediatr DI
+    }
+
+    public static class Extensions
+    {
+        public static IHostBuilder UseSerilog(this IHostBuilder builder)
+        {
+            var configuration = new ConfigurationBuilder()
+                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
+            SerilogHostBuilderExtensions.UseSerilog(builder);
+            Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
+            Serilog.Debugging.SelfLog.Enable(Console.Error);
+
+            return builder;
+        }
     }
 }

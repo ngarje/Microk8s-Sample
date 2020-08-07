@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroK8s.Razor", "MicroK8s.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroK8s.Api", "MicroK8s.Api\MicroK8s.Api.csproj", "{457C1713-9D7F-441C-8B83-86887A9CB0D8}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{6900BADD-7C4A-403F-8671-12F4805DE231}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicroK8s.IntraApi", "MicroK8s.IntraApi\MicroK8s.IntraApi.csproj", "{B4BDE341-B934-4796-94EC-626365ACE475}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroK8s-yaml", "MicroK8s-yaml", "{7B80BC89-0944-47EA-B2A7-DC1061AC836C}"
@@ -16,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroK8s-yaml", "MicroK8s-y
 		MicroK8s-yaml\api-gateway.yaml = MicroK8s-yaml\api-gateway.yaml
 		MicroK8s-yaml\api-service.yaml = MicroK8s-yaml\api-service.yaml
 		MicroK8s-yaml\default-http-backend.yaml = MicroK8s-yaml\default-http-backend.yaml
+		MicroK8s-yaml\microk8s-api.yaml = MicroK8s-yaml\microk8s-api.yaml
+		MicroK8s-yaml\microk8s-intraapi.yaml = MicroK8s-yaml\microk8s-intraapi.yaml
+		MicroK8s-yaml\microk8s-razor.yaml = MicroK8s-yaml\microk8s-razor.yaml
 		MicroK8s-yaml\mongodb.yaml = MicroK8s-yaml\mongodb.yaml
 		MicroK8s-yaml\ms-sql-server.yaml = MicroK8s-yaml\ms-sql-server.yaml
 		MicroK8s-yaml\rabbitmq.yaml = MicroK8s-yaml\rabbitmq.yaml
@@ -35,10 +36,6 @@ Global
 		{457C1713-9D7F-441C-8B83-86887A9CB0D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{457C1713-9D7F-441C-8B83-86887A9CB0D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{457C1713-9D7F-441C-8B83-86887A9CB0D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6900BADD-7C4A-403F-8671-12F4805DE231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6900BADD-7C4A-403F-8671-12F4805DE231}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6900BADD-7C4A-403F-8671-12F4805DE231}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6900BADD-7C4A-403F-8671-12F4805DE231}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4BDE341-B934-4796-94EC-626365ACE475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4BDE341-B934-4796-94EC-626365ACE475}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4BDE341-B934-4796-94EC-626365ACE475}.Release|Any CPU.ActiveCfg = Release|Any CPU
